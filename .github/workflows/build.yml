@@ -1,0 +1,158 @@
+name: Build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Materialize sources (first run only)
+        shell: bash
+        run: |
+          if [ ! -f StableVolume.csproj ]; then
+            base64 -d <<'B64' | tar xz
+          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
+          AhEu4wB4AAA=
+          B64
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Add Stable Volume WinUI 3 sources"
+            git push
+          fi
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish (self-contained win-x64)
+        run: dotnet publish StableVolume.csproj -c Release -r win-x64 -p:Platform=x64 -o publish
+
+      - name: Portable zip
+        shell: pwsh
+        run: Compress-Archive -Path publish\* -DestinationPath StableVolume-portable-win-x64.zip
+
+      - name: Installer (Inno Setup)
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" installer.iss
+          Get-ChildItem installer-out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: StableVolume-win-x64
+          path: |
+            installer-out/StableVolume-Setup.exe
+            StableVolume-portable-win-x64.zip
+
+      - name: Publish release "latest"
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag 2>$null
+          gh release create latest installer-out/StableVolume-Setup.exe StableVolume-portable-win-x64.zip --title "Stable Volume (latest build)" --notes "Installer and portable zip, built by GitHub Actions." --target ${{ github.sha }}
